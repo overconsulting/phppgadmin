@@ -48,3 +48,13 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      # Publie le README comme description du dépôt Docker Hub (sinon la page reste vide).
+      - name: Synchroniser la description Docker Hub
+        uses: peter-evans/dockerhub-description@v4
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          repository: overconsulting/phppgadmin
+          short-description: "Interface web PostgreSQL (FrankenPHP), configurable par variables d'environnement."
+          readme-filepath: ./README.md

@@ -99,6 +99,14 @@ docker compose exec app vendor/bin/phpunit --testdox
 
 ---
 
+## En savoir plus
+
+- 🐳 **Image Docker Hub** : [hub.docker.com/r/overconsulting/phppgadmin](https://hub.docker.com/r/overconsulting/phppgadmin)
+- 💻 **Code source (GitHub)** : [github.com/overconsulting/phppgadmin](https://github.com/overconsulting/phppgadmin)
+- 🎥 **La vidéo** (chaîne Overconsulting) : création et publication de l'image
+
+---
+
 ## Licence
 
 [MIT](LICENSE) © 2026 Overconsulting
