@@ -1,0 +1,58 @@
+name: Tests
+
+# Déclenché sur les push/PR, et réutilisable par le workflow de publication (workflow_call).
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_call:
+
+jobs:
+  phpunit:
+    runs-on: ubuntu-latest
+
+    # Une vraie base PostgreSQL pour les tests d'intégration.
+    services:
+      db:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: app
+          POSTGRES_PASSWORD: app
+          POSTGRES_DB: app
+        ports:
+          - "5432:5432"
+        options: >-
+          --health-cmd "pg_isready -U app -d app"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    # Config de connexion lue par App\Core\Config (mêmes noms que l'appli).
+    env:
+      PG_HOST: 127.0.0.1
+      PG_PORT: "5432"
+      PG_USER: app
+      PG_PASSWORD: app
+      PG_DEFAULT_DB: app
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Installer PHP 8.4
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+          extensions: pdo, pdo_pgsql, pgsql, intl, opcache
+          tools: composer
+          coverage: none
+
+      - name: Charger le jeu de données de démo
+        run: PGPASSWORD=app psql -h 127.0.0.1 -U app -d app -f doc/seed.sql
+
+      - name: Installer les dépendances
+        working-directory: app
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Lancer PHPUnit
+        working-directory: app
+        run: vendor/bin/phpunit --testdox

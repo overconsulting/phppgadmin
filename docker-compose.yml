@@ -1,0 +1,55 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev
+    container_name: phppgadmin_app
+    volumes:
+      - ./app:/app
+    ports:
+      - "8001:8080"
+    environment:
+      APP_ENV: dev
+      SERVER_NAME: ":8080"
+      # Porte de login désactivée en local (en prod : AUTH_ENABLED=true + APP_PASSWORD)
+      AUTH_ENABLED: "true"
+      APP_PASSWORD: "test"
+      # ===== Connexion PostgreSQL (modifie ces valeurs selon ta base) =====
+      PG_HOST: phppgadmin_db
+      PG_PORT: "5432"
+      PG_USER: app
+      PG_PASSWORD: app
+      PG_DEFAULT_DB: app
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - phppgadmin
+
+  db:
+    image: postgres:16-alpine
+    container_name: phppgadmin_db
+    environment:
+      POSTGRES_DB: app
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      # Jeu de données de démo, chargé au premier démarrage du conteneur
+      - ./doc/seed.sql:/docker-entrypoint-initdb.d/seed.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app -d app"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - phppgadmin
+
+volumes:
+  pgdata:
+
+networks:
+  phppgadmin:

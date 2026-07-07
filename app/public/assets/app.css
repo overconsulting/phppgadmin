@@ -1,0 +1,294 @@
+:root {
+    --bg: #f4f6f8;
+    --panel: #ffffff;
+    --ink: #1f2933;
+    --muted: #7b8794;
+    --border: #e1e5ea;
+    --accent: #2f6fed;
+    --accent-dark: #1f56c4;
+    --pg: #336791;
+    --danger: #c0392b;
+    --danger-bg: #fdecea;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; font-size: 0.9em; }
+
+/* Topbar */
+.topbar {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background: var(--pg);
+    color: #fff;
+    padding: 0 20px;
+    height: 52px;
+}
+.topbar .brand { color: #fff; font-weight: 700; font-size: 16px; }
+.topbar-actions { display: flex; gap: 16px; }
+.topbar-actions a { color: #dbe7ff; }
+
+/* Layout */
+.layout { display: flex; min-height: calc(100vh - 52px); }
+.sidebar {
+    width: 240px;
+    background: var(--panel);
+    border-right: 1px solid var(--border);
+    padding: 16px;
+    flex-shrink: 0;
+}
+.sidebar h2 { font-size: 12px; text-transform: uppercase; color: var(--muted); margin: 0 0 8px; }
+.db-list { list-style: none; margin: 0; padding: 0; }
+.db-list > li { margin: 2px 0; }
+
+/* Lien vers une base non sélectionnée */
+.db-link { display: block; padding: 6px 10px; border-radius: 6px; color: var(--ink); }
+.db-link:hover { background: var(--bg); text-decoration: none; }
+
+/* Base courante : en-tête dépliable (même bleu que la navbar) */
+.db-item > summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-weight: 600;
+    color: #fff;
+    background: var(--pg);
+    user-select: none;
+}
+.db-item > summary::-webkit-details-marker { display: none; }
+.db-item > summary::before { content: "▸ "; opacity: .8; }
+.db-item[open] > summary::before { content: "▾ "; opacity: .8; }
+
+/* Arborescence des tables (zone scrollable = l'ascenseur) */
+.nav-tables { margin: 4px 0 6px; max-height: calc(100vh - 220px); overflow-y: auto; }
+.nav-schema { font-size: 11px; text-transform: uppercase; color: var(--muted); margin: 8px 6px 2px; letter-spacing: .03em; }
+.nav-table-list { list-style: none; margin: 0; padding: 0; }
+.nav-table { display: flex; align-items: center; gap: 6px; padding: 4px 10px 4px 14px; border-radius: 6px; color: var(--ink); font-size: 13px; }
+.nav-table:hover { background: var(--bg); text-decoration: none; }
+.nav-table.active-table { background: var(--accent); color: #fff; }
+.nav-table-icon { color: var(--muted); font-size: 11px; }
+.nav-table.active-table .nav-table-icon { color: #fff; }
+.nav-empty { margin: 6px 10px; font-size: 13px; }
+
+.content { flex: 1; padding: 24px 28px; min-width: 0; }
+
+h1 { font-size: 22px; margin: 0 0 4px; }
+h2 { font-size: 16px; margin: 24px 0 8px; }
+
+.muted { color: var(--muted); }
+.null { font-style: italic; }
+
+/* Breadcrumb & tabs */
+.breadcrumb { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin: 16px 0; }
+.tabs a {
+    padding: 8px 16px;
+    border: 1px solid transparent;
+    border-bottom: none;
+    border-radius: 6px 6px 0 0;
+    color: var(--muted);
+}
+.tabs a.active {
+    background: var(--panel);
+    border-color: var(--border);
+    color: var(--ink);
+    font-weight: 600;
+    margin-bottom: -1px;
+}
+
+/* Cards (liste des bases) */
+.cards { list-style: none; padding: 0; margin: 16px 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+.card { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; }
+.card a { display: flex; align-items: center; gap: 10px; padding: 16px; color: var(--ink); }
+.card a:hover { text-decoration: none; border-color: var(--accent); }
+.card-icon { font-size: 20px; }
+.card-title { font-weight: 600; }
+
+/* Tables */
+.table-scroll { overflow-x: auto; }
+table.grid { border-collapse: collapse; width: 100%; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+table.grid th, table.grid td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+table.grid th { background: #f0f3f7; font-size: 12px; text-transform: uppercase; color: var(--muted); }
+table.grid tbody tr:hover { background: #f7f9fc; }
+table.grid tbody tr:last-child td { border-bottom: none; }
+.actions a { margin-right: 12px; }
+
+/* Badges */
+.badge { display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+.badge-table { background: #e3f0ff; color: var(--accent-dark); }
+.badge-vue { background: #fdf0e3; color: #b9770e; }
+.badge-pk { background: #e6f4ea; color: #1e7e34; }
+
+.schema-block { margin-bottom: 28px; }
+
+/* Alerts */
+.alert { background: #eef2f7; border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; margin: 16px 0; }
+.alert-error { background: var(--danger-bg); border-color: #f5c6c2; color: var(--danger); }
+
+/* Form */
+textarea {
+    width: 100%;
+    font-family: "SFMono-Regular", Consolas, monospace;
+    font-size: 13px;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    resize: vertical;
+}
+.form-actions { margin: 12px 0; }
+button {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 9px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+}
+button:hover { background: var(--accent-dark); }
+
+/* Pager */
+.pager { display: flex; gap: 16px; margin: 16px 0; }
+
+/* Toolbar (filtre / export dans l'onglet Données) */
+.toolbar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 16px 0; padding: 12px 14px; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; }
+.toolbar label { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 13px; }
+.toolbar select, .toolbar input[type="text"] { padding: 7px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; }
+.toolbar input[type="text"] { min-width: 180px; }
+
+/* Boutons secondaires & liens-boutons */
+.btn-secondary { background: #eef2f7; color: var(--ink); border: 1px solid var(--border); }
+.btn-secondary:hover { background: #e3e9f1; }
+.btn-link { color: var(--accent); padding: 8px 4px; }
+.form-actions { display: flex; gap: 10px; align-items: center; }
+
+/* En-têtes triables */
+.sort-link { color: inherit; display: inline-flex; gap: 4px; white-space: nowrap; }
+.sort-link:hover { color: var(--accent); text-decoration: none; }
+
+/* Badge clé étrangère */
+.badge-fk { background: #efe6fb; color: #7b3fb0; }
+
+/* Messages flash */
+.flash { padding: 10px 14px; border-radius: 8px; margin: 0 0 16px; border: 1px solid var(--border); }
+.flash-success { background: #e6f4ea; border-color: #b7e1c4; color: #1e7e34; }
+.flash-error { background: var(--danger-bg); border-color: #f5c6c2; color: var(--danger); }
+
+/* Barre d'actions au-dessus des données */
+.data-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.btn-add { display: inline-block; background: #e6f4ea; color: #1e7e34; border: 1px solid #b7e1c4; padding: 7px 14px; border-radius: 8px; font-weight: 600; }
+.btn-add:hover { background: #d6ecde; text-decoration: none; }
+
+/* Colonne Actions dans la grille */
+.col-actions { white-space: nowrap; }
+.col-actions .row-edit { margin-right: 8px; }
+.col-actions .row-delete { display: inline; }
+.btn-danger { background: var(--danger); color: #fff; border: none; padding: 4px 10px; border-radius: 6px; font-size: 12px; cursor: pointer; }
+.btn-danger:hover { background: #a5281b; }
+
+/* Formulaire de ligne (insert/édition) */
+.form-grid th { text-align: left; }
+.form-grid .center { text-align: center; }
+.form-grid input[type="text"] { width: 100%; padding: 6px 8px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; }
+.form-grid input[type="text"]:disabled { background: #f0f3f7; color: var(--muted); }
+.row-form .form-actions { margin-top: 16px; }
+.write-toggle { display: inline-flex; align-items: center; gap: 6px; color: var(--danger); font-weight: 600; font-size: 13px; }
+
+/* Formulaires DDL (colonne / création de table) */
+.ddl-form { max-width: 720px; }
+.ddl-form .field { margin: 12px 0; }
+.ddl-form .field > label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 4px; }
+.ddl-form .field > label.inline { display: inline-flex; align-items: center; gap: 6px; color: var(--ink); }
+.ddl-form .field input[type="text"] { width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; }
+.ddl-form .grid input[type="text"] { width: 100%; padding: 6px 8px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; }
+
+/* Onglet Action : blocs renommer / supprimer */
+.action-blocks { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 16px; max-width: 760px; }
+.action-card { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; }
+.action-card h2 { margin-top: 0; }
+.action-card.action-danger { border-color: #f5c6c2; background: #fffafa; }
+.inline-form { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.inline-form input[type="text"] { padding: 7px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; }
+
+/* Cadre de la requête exécutée */
+.sql-box { margin: 16px 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; background: #fbfdff; }
+.sql-box-head { display: flex; align-items: center; justify-content: space-between; padding: 6px 12px; background: #eef2f7; border-bottom: 1px solid var(--border); font-size: 12px; text-transform: uppercase; color: var(--muted); }
+.sql-box pre { margin: 0; padding: 12px; overflow-x: auto; }
+.sql-box code { color: #1f3a5f; font-size: 13px; }
+.sql-box-write { border-color: #b7e1c4; background: #f3fbf5; }
+.sql-box-write .sql-box-head { background: #e6f4ea; color: #1e7e34; }
+.sql-box-write code { color: #14532d; }
+
+/* ===== Page de connexion (auth) ===== */
+.login-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: var(--bg);
+}
+.login-card {
+    width: 100%;
+    max-width: 360px;
+    padding: 32px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 6px 24px rgba(31, 41, 51, 0.08);
+}
+.login-brand {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--pg);
+    text-align: center;
+    margin-bottom: 24px;
+}
+.login-form { display: flex; flex-direction: column; gap: 16px; }
+.login-field { display: flex; flex-direction: column; gap: 6px; }
+.login-field span { color: var(--muted); font-size: 13px; }
+.login-field input {
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+}
+.login-field input:focus { outline: 2px solid var(--accent); border-color: var(--accent); }
+.login-card button { width: 100%; padding: 10px; }
+/* Déconnexion : bouton rouge, poussé à droite de la navbar */
+.topbar-logout {
+    margin-left: auto;
+    background: var(--danger);
+    color: #fff;
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+}
+.topbar-logout:hover { background: #a5281b; }
+
+/* Pas de soulignement au survol DANS la navbar (conservé partout ailleurs) */
+.topbar a:hover { text-decoration: none; }
+
+/* ===== Sélection multiple de tables (liste d'un schéma) ===== */
+.grid .col-check { width: 32px; text-align: center; }
+.bulk-actions { margin: 12px 0 4px; }
+
+/* Liste des tables : colonne Actions plus large, pour laisser de la place aux liens */
+.schema-block .grid td.actions,
+.schema-block .grid th:last-child { width: 20%; }
+/* Lien stylé comme un bouton secondaire (ex. « Opérations » sur la page schéma) */
+a.btn-secondary { display: inline-block; padding: 7px 14px; border-radius: 8px; }
+a.btn-secondary:hover { text-decoration: none; }
